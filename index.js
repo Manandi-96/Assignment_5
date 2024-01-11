@@ -1,5 +1,5 @@
     import express from "express";
-    import { MongoClient } from 'mongodb'
+    import { MongoClient } from 'mongodb';
 
     const app= express();
     const port= 4000;
@@ -144,6 +144,35 @@
                 res.send("Invalid Input")
             }
         })
+
+        //delete order
+
+app.delete('/deleteOrder/:id', (req, res) => {
+    let oid = +req.params.id
+    db.collection("orders").deleteOne({ orderId: oid }, (err, result) => {
+        if (err) throw err;
+        res.send("Order deleted successfully")
+    })
+})
+
+//update payment details
+
+
+app.put('/updateOrder/:id', (req, res) => {
+    let oid = +req.params.id
+    db.collection("orders").updateOne({ orderId: oid },
+        {
+            $set: {
+                status: req.body.status,
+                bank_name: req.body.bank_name,
+                date: req.body.date,
+            }
+        },
+        (err, result) => {
+            if (err) throw err;
+            res.send("Order updated successfully")
+        })
+})
 
 
 
